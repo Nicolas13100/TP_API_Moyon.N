@@ -11,10 +11,6 @@ import (
 	"text/template"
 )
 
-func main() {
-
-}
-
 func RUN() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/album/jul", julHandler)
@@ -34,7 +30,7 @@ func RUN() {
 	}
 }
 
-func Tomove() {
+func main() {
 	clientID := "9b51a859f77e4bbda1729134d73e6676"
 	clientSecret := "e22dafb4d6344f7d9704f034690f0a8c"
 
@@ -133,6 +129,18 @@ func searchArtist(artistName string, accessToken string) (API.Artist, error) {
 
 	followers := artistData["followers"].(map[string]interface{})
 	artist.Followers.Total = int(followers["total"].(float64))
+
+	return artist, nil
+}
+
+func etAlbumByArtist(artistID string, accessToken string) (API.JulAlbum, error) {
+	searchURL := "https://api.spotify.com/v1/artists/" + artistID + "/albums?market=FR"
+	req, err := http.NewRequest("GET", searchURL, nil)
+	if err != nil {
+		return API.JulAlbum{}, err
+	}
+
+	req.Header.Add("Authorization", "Bearer "+accessToken)
 
 	return artist, nil
 }
