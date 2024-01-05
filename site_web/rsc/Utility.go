@@ -9,7 +9,7 @@ import (
 )
 
 func getAccessToken(authHeader string) (string, error) {
-	// generate the token, token is valid for 1H but i won't bother having a timer on that relorad a constant every 55min, so yeah.
+	// generate the token, token is valid for 1H but i won't bother having a timer on that reload a constant every 55min, so yeah.
 
 	// the URL
 	tokenURL := "https://accounts.spotify.com/api/token"
