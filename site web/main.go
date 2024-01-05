@@ -6,9 +6,30 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
+	"text/template"
 )
 
 func main() {
+	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/album/jul", julHandler)
+	http.HandleFunc("/track/sdm", sdmHandler)
+	http.HandleFunc("/gestion/jul", GjulHandler)
+	http.HandleFunc("/gestion/sdm", GsdmHandler)
+
+	// Serve static files from the "static" directory
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
+	// Print statement indicating server is running
+	fmt.Println("Server is running on :8080 http://localhost:8080")
+
+	// Start the server
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func API() {
 	clientID := "9b51a859f77e4bbda1729134d73e6676"
 	clientSecret := "e22dafb4d6344f7d9704f034690f0a8c"
 
@@ -59,7 +80,7 @@ func getAccessToken(authHeader string) (string, error) {
 
 	accessToken, ok := tokenResp["access_token"].(string)
 	if !ok {
-		return "", fmt.Errorf("Token d'accès introuvable")
+		return "", fmt.Errorf("token d'accès introuvable")
 	}
 
 	return accessToken, nil
@@ -89,12 +110,12 @@ func searchArtist(artistName string, accessToken string) (Artist, error) {
 
 	artists, ok := searchResp["artists"].(map[string]interface{})
 	if !ok {
-		return Artist{}, fmt.Errorf("Aucun artiste trouvé")
+		return Artist{}, fmt.Errorf("aucun artiste trouvé")
 	}
 
 	items, ok := artists["items"].([]interface{})
 	if !ok || len(items) == 0 {
-		return Artist{}, fmt.Errorf("Aucun artiste trouvé")
+		return Artist{}, fmt.Errorf("aucun artiste trouvé")
 	}
 
 	// Récupérer les détails du premier artiste trouvé
@@ -118,4 +139,40 @@ type Artist struct {
 	Followers  struct {
 		Total int
 	}
+}
+
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	renderTemplate(w, "index", nil)
+}
+
+func julHandler(w http.ResponseWriter, r *http.Request) {
+	renderTemplate(w, "jul", nil)
+}
+
+func sdmHandler(w http.ResponseWriter, r *http.Request) {
+	renderTemplate(w, "bolideAllemand", nil)
+}
+
+func GjulHandler(w http.ResponseWriter, r *http.Request) {}
+
+func GsdmHandler(w http.ResponseWriter, r *http.Request) {}
+
+func renderTemplate(w http.ResponseWriter, tmplName string, data interface{}) {
+	tmpl, err := template.New(tmplName).Funcs(template.FuncMap{"join": join}).ParseFiles("Template/" + tmplName + ".html")
+	if err != nil {
+		fmt.Println("Error parsing template:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	err = tmpl.ExecuteTemplate(w, tmplName, data)
+	if err != nil {
+		fmt.Println("Error executing template:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func join(s []string, sep string) string {
+	return strings.Join(s, sep)
 }

@@ -1,0 +1,379 @@
+{
+	"info": {
+		"_postman_id": "f062f398-0613-4336-8df9-1e162d227369",
+		"name": "MOYON Nicolas part I API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32084528"
+	},
+	"item": [
+		{
+			"name": "Q1",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer BQD89y2wyfp8Fr6YkhekKD_dJv0MQ7evZDMS3GznHTKj76XKFlt4_nJZmEKbA-189jFN04TPi8KO6L6AJpIoowNQ7mV8ARFWANQA06L0Y-XHd73K7lE",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://api.spotify.com/v1/search?type=artist&q=JuL&limit=3",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"search"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "artist"
+						},
+						{
+							"key": "q",
+							"value": "JuL"
+						},
+						{
+							"key": "limit",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q2",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer BQD89y2wyfp8Fr6YkhekKD_dJv0MQ7evZDMS3GznHTKj76XKFlt4_nJZmEKbA-189jFN04TPi8KO6L6AJpIoowNQ7mV8ARFWANQA06L0Y-XHd73K7lE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.spotify.com/v1/artists/3IW7ScrzXmPvZhB27hmfgy/albums",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"artists",
+						"3IW7ScrzXmPvZhB27hmfgy",
+						"albums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/albums/1WYGwCvsfFrr7kuQcfNnJr/tracks?limit=5",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"albums",
+						"1WYGwCvsfFrr7kuQcfNnJr",
+						"tracks"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q4",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/tracks/7sZas5ww0qoNF9B5B8ebir",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"tracks",
+						"7sZas5ww0qoNF9B5B8ebir"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q5",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/artists/2kXKa3aAFngGz2P4GjG5w2/top-tracks?market=FR",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"artists",
+						"2kXKa3aAFngGz2P4GjG5w2",
+						"top-tracks"
+					],
+					"query": [
+						{
+							"key": "market",
+							"value": "FR"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q6",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/tracks/0EzNyXyU7gHzj2TN8qYThj",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"tracks",
+						"0EzNyXyU7gHzj2TN8qYThj"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q7",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer BQAK96O0QS4FXgh5nuVeqZFATHhLsfEqtrF_OnBS3RYP0FUn8HBabNBs3Ztpp_1KhNYPULk4pZhRqjU9dicCZsB916zjUHxK0q_VFJ6It9cVGHplgwr1jhfO",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://api.spotify.com/v1/search?q=Les+actus+du+jour+-+Hugo+d%C3%A9crypte&type=show&market=FR",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Les+actus+du+jour+-+Hugo+d%C3%A9crypte"
+						},
+						{
+							"key": "type",
+							"value": "show"
+						},
+						{
+							"key": "market",
+							"value": "FR"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q8",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/shows/6y1PloEyNsCNJH9vHias4T/episodes?limit=3&sort=desc",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"shows",
+						"6y1PloEyNsCNJH9vHias4T",
+						"episodes"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "3"
+						},
+						{
+							"key": "sort",
+							"value": "desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q9",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spotify.com/v1/shows/6y1PloEyNsCNJH9vHias4T/episodes?limit=1&sort=desc&offset=1",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spotify",
+						"com"
+					],
+					"path": [
+						"v1",
+						"shows",
+						"6y1PloEyNsCNJH9vHias4T",
+						"episodes"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "1"
+						},
+						{
+							"key": "sort",
+							"value": "desc"
+						},
+						{
+							"key": "offset",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "refreshRequestParams",
+				"value": [
+					{
+						"key": "payload",
+						"value": "?grant_type=client_credentials",
+						"enabled": true,
+						"send_as": "request_body"
+					}
+				],
+				"type": "any"
+			},
+			{
+				"key": "scope",
+				"value": "user-read-playback-position",
+				"type": "string"
+			},
+			{
+				"key": "tokenRequestParams",
+				"value": [
+					{
+						"key": "payload",
+						"value": "?grant_type=client_credentials",
+						"enabled": true,
+						"send_as": "request_body"
+					}
+				],
+				"type": "any"
+			},
+			{
+				"key": "clientSecret",
+				"value": "e22dafb4d6344f7d9704f034690f0a8c",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "9b51a859f77e4bbda1729134d73e6676",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "https://accounts.spotify.com/api/token",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "client_credentials",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "TEST API",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
