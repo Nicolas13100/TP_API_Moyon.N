@@ -9,6 +9,7 @@ import (
 )
 
 func RUN() {
+
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/album/jul", julHandler)
 	http.HandleFunc("/track/sdm", sdmHandler)
@@ -16,7 +17,7 @@ func RUN() {
 	http.HandleFunc("/gestion/sdm", GsdmHandler)
 
 	// Serve static files from the "static" directory
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("site_web/static"))))
 
 	// Print statement indicating server is running
 	fmt.Println("Server is running on :8080 http://localhost:8080")
@@ -36,7 +37,7 @@ func julHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func sdmHandler(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "bolideAllemand", nil)
+	renderTemplate(w, "sdm", nil)
 }
 
 func GjulHandler(w http.ResponseWriter, r *http.Request) {}
@@ -44,7 +45,7 @@ func GjulHandler(w http.ResponseWriter, r *http.Request) {}
 func GsdmHandler(w http.ResponseWriter, r *http.Request) {}
 
 func renderTemplate(w http.ResponseWriter, tmplName string, data interface{}) {
-	tmpl, err := template.New(tmplName).Funcs(template.FuncMap{"join": join}).ParseFiles("Template/" + tmplName + ".html")
+	tmpl, err := template.New(tmplName).Funcs(template.FuncMap{"join": join}).ParseFiles("site_web/Template/" + tmplName + ".html")
 	if err != nil {
 		fmt.Println("Error parsing template:", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
