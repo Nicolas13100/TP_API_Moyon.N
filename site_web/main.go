@@ -43,8 +43,23 @@ func main() {
 		log.Fatalf("Impossible d'obtenir un token: %v", err)
 	}
 
+}
+
+func JUL() {
+	clientID := "9b51a859f77e4bbda1729134d73e6676"
+	clientSecret := "e22dafb4d6344f7d9704f034690f0a8c"
+
+	// Encodez les informations d'identification du client pour l'authentification Basic
+	authHeader := base64.StdEncoding.EncodeToString([]byte(clientID + ":" + clientSecret))
+
+	// Obtenez un token d'accès OAuth2
+	token, err := getAccessToken(authHeader)
+	if err != nil {
+		log.Fatalf("Impossible d'obtenir un token: %v", err)
+	}
+
 	// Utilisez le token d'accès pour faire une requête vers l'API Spotify
-	artistName := "michael_jackson"
+	artistName := "JUL"
 	artist, err := searchArtist(artistName, token)
 	if err != nil {
 		log.Fatalf("Erreur lors de la recherche de l'artiste: %v", err)
@@ -53,6 +68,29 @@ func main() {
 	// Afficher les informations sur l'artiste
 	fmt.Printf("Informations sur l'artiste:\nNom: %s\nType: %s\nPopularité: %d\nFollowers: %d\n",
 		artist.Name, artist.Type, artist.Popularity, artist.Followers.Total)
+	fmt.Println("----------------------------")
+
+	artistID, err := searchArtistID(artistName, token)
+	if err != nil {
+		fmt.Println("Error searching for artist:", err)
+		return
+	}
+
+	// Get the artist's albums
+	albums, err := getArtistAlbums(artistID, token)
+	if err != nil {
+		fmt.Println("Error fetching albums:", err)
+		return
+	}
+
+	// Display album information
+	for _, album := range albums {
+		fmt.Println("Album Name:", album.Name)
+		fmt.Println("Cover Image:", album.CoverImage)
+		fmt.Println("Release Date:", album.ReleaseDate)
+		fmt.Println("Number of Songs:", album.NumberOfSongs)
+		fmt.Println("----------------------------")
+	}
 }
 
 func getAccessToken(authHeader string) (string, error) {
@@ -133,16 +171,86 @@ func searchArtist(artistName string, accessToken string) (API.Artist, error) {
 	return artist, nil
 }
 
-func etAlbumByArtist(artistID string, accessToken string) (API.JulAlbum, error) {
-	searchURL := "https://api.spotify.com/v1/artists/" + artistID + "/albums?market=FR"
-	req, err := http.NewRequest("GET", searchURL, nil)
+func getArtistAlbums(artistID string, accessToken string) ([]API.Album, error) {
+	albumsURL := fmt.Sprintf("https://api.spotify.com/v1/artists/%s/albums", artistID)
+
+	req, err := http.NewRequest("GET", albumsURL, nil)
 	if err != nil {
-		return API.JulAlbum{}, err
+		return nil, err
 	}
 
 	req.Header.Add("Authorization", "Bearer "+accessToken)
 
-	return artist, nil
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var albumsResp map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&albumsResp); err != nil {
+		return nil, err
+	}
+
+	albumsData, ok := albumsResp["items"].([]interface{})
+	if !ok {
+		return nil, fmt.Errorf("aucun album trouvé")
+	}
+
+	var albums []API.Album
+	for _, album := range albumsData {
+		albumData := album.(map[string]interface{})
+		var newAlbum API.Album
+		newAlbum.Name = albumData["name"].(string)
+		images := albumData["images"].([]interface{})
+		if len(images) > 0 {
+			newAlbum.CoverImage = images[0].(map[string]interface{})["url"].(string)
+		}
+		newAlbum.ReleaseDate = albumData["release_date"].(string)
+		tracks := albumData["total_tracks"].(float64)
+		newAlbum.NumberOfSongs = int(tracks)
+		albums = append(albums, newAlbum)
+	}
+
+	return albums, nil
+}
+
+func searchArtistID(artistName string, accessToken string) (string, error) {
+	searchURL := "https://api.spotify.com/v1/search?type=artist&q=" + artistName
+
+	req, err := http.NewRequest("GET", searchURL, nil)
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Add("Authorization", "Bearer "+accessToken)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	var searchResp map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&searchResp); err != nil {
+		return "", err
+	}
+
+	artists, ok := searchResp["artists"].(map[string]interface{})
+	if !ok {
+		return "", fmt.Errorf("aucun artiste trouvé")
+	}
+
+	items, ok := artists["items"].([]interface{})
+	if !ok || len(items) == 0 {
+		return "", fmt.Errorf("aucun artiste trouvé")
+	}
+
+	// Return the ID of the first artist found
+	artistData := items[0].(map[string]interface{})
+	return artistData["id"].(string), nil
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
