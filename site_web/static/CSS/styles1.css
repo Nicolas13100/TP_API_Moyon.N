@@ -21,6 +21,12 @@ ul {
 
 
 .album-cover {
-    max-width: 150px; 
-    height: auto; 
-  }
+  max-width: 150px;
+  height: auto;
+}
+
+.SDMcover {
+  max-width: 300px;
+  height: auto;
+  justify-content: center;
+}

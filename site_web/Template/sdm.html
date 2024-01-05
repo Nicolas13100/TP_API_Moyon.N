@@ -5,15 +5,14 @@
   <meta charset="UTF-8">
   <title>SDM</title>
   <link rel="stylesheet" href="/static/CSS/styles1.css">
-  <script src="/static/JS/script.js"></script>
 </head>
 <body>
   <h1>{{.Title}}</h1>
-  <img src="{{.AlbumCover}}" alt="Album Cover">
-  <p>Album Name: {{.AlbumName}}</p>
-  <p>Artist Name: {{.ArtistName}}</p>
-  <p>Release Date: {{.ReleaseDate}}</p>
-  <p>Spotify Link: <a href="{{.SpotifyLink}}">Listen on Spotify</a></p>
+  <div><img src="{{.AlbumCover}}" alt="Album Cover" class="SDMcover"></div>
+  <p>Nom de l'album: {{.AlbumName}}</p>
+  <p>Nom de l'artist: {{.ArtistName}}</p>
+  <p>Date de sortie: {{.ReleaseDate}}</p>
+  <p>Lien Spotify: <a href="{{.SpotifyLink}}">Listen on Spotify</a></p>
 </body>
 </html>
 {{end}}
