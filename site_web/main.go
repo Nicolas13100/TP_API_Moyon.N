@@ -10,6 +10,15 @@ import (
 	"text/template"
 )
 
+type Artist struct {
+	Name       string
+	Type       string
+	Popularity int
+	Followers  struct {
+		Total int
+	}
+}
+
 func main() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/album/jul", julHandler)
@@ -130,15 +139,6 @@ func searchArtist(artistName string, accessToken string) (Artist, error) {
 	artist.Followers.Total = int(followers["total"].(float64))
 
 	return artist, nil
-}
-
-type Artist struct {
-	Name       string
-	Type       string
-	Popularity int
-	Followers  struct {
-		Total int
-	}
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {

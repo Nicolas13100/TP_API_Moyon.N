@@ -1,3 +1,3 @@
-module API
+module APi
 
 go 1.21.5
