@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
-	"text/template"
 )
 
 func RUN() {
@@ -13,16 +11,14 @@ func RUN() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/album/jul", julHandler)
 	http.HandleFunc("/track/sdm", sdmHandler)
-	http.HandleFunc("/gestion/jul", GjulHandler)
-	http.HandleFunc("/gestion/sdm", GsdmHandler)
 
-	// Serve static files from the "static" directory
+	// Serve static files from the "site_web/static" directory << copied from hangman
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("site_web/static"))))
 
-	// Print statement indicating server is running
+	// Print statement indicating server is running << same
 	fmt.Println("Server is running on :8080 http://localhost:8080")
 
-	// Start the server
+	// Start the server << same
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
@@ -33,33 +29,21 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func julHandler(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "jul", nil)
+	// Call the function to retrieve album information and send them to the page <>.<>
+	albums, err := getJULAlbums()
+	if err != nil {
+		http.Error(w, "Error retrieving albums", http.StatusInternalServerError)
+		return
+	}
+	renderTemplate(w, "jul", albums)
 }
 
 func sdmHandler(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "sdm", nil)
-}
-
-func GjulHandler(w http.ResponseWriter, r *http.Request) {}
-
-func GsdmHandler(w http.ResponseWriter, r *http.Request) {}
-
-func renderTemplate(w http.ResponseWriter, tmplName string, data interface{}) {
-	tmpl, err := template.New(tmplName).Funcs(template.FuncMap{"join": join}).ParseFiles("site_web/Template/" + tmplName + ".html")
+	// Call the function to retrieve track information and send them to the page <>.<>
+	trackInfo, err := SDM()
 	if err != nil {
-		fmt.Println("Error parsing template:", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	err = tmpl.ExecuteTemplate(w, tmplName, data)
-	if err != nil {
-		fmt.Println("Error executing template:", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
-}
-
-func join(s []string, sep string) string {
-	return strings.Join(s, sep)
+	renderTemplate(w, "sdm", trackInfo)
 }

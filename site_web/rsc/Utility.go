@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"text/template"
 )
 
 func getAccessToken(authHeader string) (string, error) {
@@ -37,52 +38,6 @@ func getAccessToken(authHeader string) (string, error) {
 	}
 
 	return accessToken, nil
-}
-
-func searchArtist(artistName string, accessToken string) (Artist, error) {
-	searchURL := "https://api.spotify.com/v1/search?type=artist&q=" + artistName
-
-	req, err := http.NewRequest("GET", searchURL, nil)
-	if err != nil {
-		return Artist{}, err
-	}
-
-	req.Header.Add("Authorization", "Bearer "+accessToken)
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return Artist{}, err
-	}
-	defer resp.Body.Close()
-
-	var searchResp map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&searchResp); err != nil {
-		return Artist{}, err
-	}
-
-	artists, ok := searchResp["artists"].(map[string]interface{})
-	if !ok {
-		return Artist{}, fmt.Errorf("aucun artiste trouvé")
-	}
-
-	items, ok := artists["items"].([]interface{})
-	if !ok || len(items) == 0 {
-		return Artist{}, fmt.Errorf("aucun artiste trouvé")
-	}
-
-	// Récupérer les détails du premier artiste trouvé
-	artistData := items[0].(map[string]interface{})
-
-	var artist Artist
-	artist.Name = artistData["name"].(string)
-	artist.Type = artistData["type"].(string)
-	artist.Popularity = int(artistData["popularity"].(float64))
-
-	followers := artistData["followers"].(map[string]interface{})
-	artist.Followers.Total = int(followers["total"].(float64))
-
-	return artist, nil
 }
 
 func getArtistAlbums(artistID string, accessToken string) ([]Album, error) {
@@ -219,4 +174,26 @@ func searchTrack(artistName, trackName, accessToken string) (*TrackInfo, error) 
 	trackInfo.SpotifyLink = trackData["external_urls"].(map[string]interface{})["spotify"].(string)
 
 	return trackInfo, nil
+}
+
+func renderTemplate(w http.ResponseWriter, tmplName string, data interface{}) {
+
+	tmpl, err := template.New(tmplName).Funcs(template.FuncMap{"join": join}).ParseFiles("site_web/Template/" + tmplName + ".html")
+	if err != nil {
+		fmt.Println("Error parsing template:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	err = tmpl.ExecuteTemplate(w, tmplName, data)
+	if err != nil {
+		fmt.Println("Error executing template:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+}
+
+func join(s []string, sep string) string {
+
+	return strings.Join(s, sep)
 }

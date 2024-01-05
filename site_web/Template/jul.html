@@ -4,11 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <title>JUL</title>
-  <link rel="stylesheet" href="/static/CSS/style.css">
-  <script src="/static/JS/script.js"></script>
+  <link rel="stylesheet" href="/static/CSS/styles1.css">
+  <script src=></script>
 </head>
 <body>
-    
+  <h1>Albums de JUL</h1>
+  <ul>
+  {{range .}}
+    <li>
+      <div>Nom de l'album: {{.Name}}</div>
+      <div>Image de couverture:</div> <img src="{{.CoverImage}}" alt="Album Cover" class="album-cover"><br>
+      <div>Date de sorti: {{.ReleaseDate}}</div>
+      <div>Nombre de titre: {{.NumberOfSongs}}</div><br>
+      <hr>
+    </li>
+    {{end}}
 </body>
 </html>
 {{end}}

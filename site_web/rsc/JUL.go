@@ -21,15 +21,6 @@ func JUL() {
 
 	// Utilisez le token d'accès pour faire une requête vers l'API Spotify
 	artistName := "JUL"
-	artist, err := searchArtist(artistName, token)
-	if err != nil {
-		log.Fatalf("Erreur lors de la recherche de l'artiste: %v", err)
-	}
-
-	// Afficher les informations sur l'artiste
-	fmt.Printf("Informations sur l'artiste:\nNom: %s\nType: %s\nPopularité: %d\nFollowers: %d\n",
-		artist.Name, artist.Type, artist.Popularity, artist.Followers.Total)
-	fmt.Println("----------------------------")
 
 	artistID, err := searchArtistID(artistName, token)
 	if err != nil {
@@ -52,4 +43,36 @@ func JUL() {
 		fmt.Println("Number of Songs:", album.NumberOfSongs)
 		fmt.Println("----------------------------")
 	}
+}
+
+func getJULAlbums() ([]Album, error) {
+	// use basic to make it cli too, just in case, for debug
+	JUL()
+	// Start of code
+	clientID := "9b51a859f77e4bbda1729134d73e6676"
+	clientSecret := "e22dafb4d6344f7d9704f034690f0a8c"
+
+	// Encode the client's credentials for Basic authentication << asked by web documentation
+	authHeader := base64.StdEncoding.EncodeToString([]byte(clientID + ":" + clientSecret))
+
+	// Get an OAuth2 access token << needed for query to work
+	token, err := getAccessToken(authHeader)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get token: %v", err)
+	}
+
+	// Search for the artist's ID << may be made interactive, not asked for now
+	artistName := "JUL"
+	artistID, err := searchArtistID(artistName, token)
+	if err != nil {
+		return nil, fmt.Errorf("error searching for artist: %v", err)
+	}
+
+	// Get the artist's albums ><><
+	albums, err := getArtistAlbums(artistID, token)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching albums: %v", err)
+	}
+
+	return albums, nil
 }
