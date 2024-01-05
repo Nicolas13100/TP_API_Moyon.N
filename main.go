@@ -1,4 +1,4 @@
-package Hangman
+package main
 
 import (
 	"encoding/base64"
