@@ -7,12 +7,12 @@ import (
 )
 
 func RUN() {
-
+	// used same system than hangman, since it was working prety well
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/album/jul", julHandler)
 	http.HandleFunc("/track/sdm", sdmHandler)
 
-	// Serve static files from the "site_web/static" directory << copied from hangman
+	// Serve static files from the "site_web/static" directory << modified from hangman
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("site_web/static"))))
 
 	// Print statement indicating server is running << same

@@ -1,5 +1,7 @@
 package API
 
+// struct, nothing much to explain here
+
 type Artist struct {
 	Name       string
 	Type       string

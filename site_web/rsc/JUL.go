@@ -10,16 +10,16 @@ func JUL() {
 	clientID := "9b51a859f77e4bbda1729134d73e6676"
 	clientSecret := "e22dafb4d6344f7d9704f034690f0a8c"
 
-	// Encodez les informations d'identification du client pour l'authentification Basic
+	// Encodez les informations d'identification du client pour l'authentification Basic << en français parceque pouquoi pas
 	authHeader := base64.StdEncoding.EncodeToString([]byte(clientID + ":" + clientSecret))
 
-	// Obtenez un token d'accès OAuth2
+	// Obtenez un token d'accès OAuth2 << et lui aussi tien \o/
 	token, err := getAccessToken(authHeader)
 	if err != nil {
 		log.Fatalf("Impossible d'obtenir un token: %v", err)
 	}
 
-	// Utilisez le token d'accès pour faire une requête vers l'API Spotify
+	// Utilisez le token d'accès pour faire une requête vers l'API Spotify << sinon ba sa marche pas
 	artistName := "JUL"
 
 	artistID, err := searchArtistID(artistName, token)
@@ -28,14 +28,14 @@ func JUL() {
 		return
 	}
 
-	// Get the artist's albums
+	// Get the artist's albums << as asked
 	albums, err := getArtistAlbums(artistID, token)
 	if err != nil {
 		fmt.Println("Error fetching albums:", err)
 		return
 	}
 
-	// Display album information
+	// Display album information << cli version because, can be needed <<__>>
 	for _, album := range albums {
 		fmt.Println("Album Name:", album.Name)
 		fmt.Println("Cover Image:", album.CoverImage)
@@ -47,6 +47,7 @@ func JUL() {
 
 func getJULAlbums() ([]Album, error) {
 	// use basic to make it cli too, just in case, for debug
+	// found later i could have made all in one, but left like that since it's working :-D
 	JUL()
 	// Start of code
 	clientID := "9b51a859f77e4bbda1729134d73e6676"
