@@ -1,4 +1,4 @@
-package APi
+package API
 
 type Artist struct {
 	Name       string
@@ -14,4 +14,13 @@ type Album struct {
 	CoverImage    string
 	ReleaseDate   string
 	NumberOfSongs int
+}
+
+type TrackInfo struct {
+	Title       string
+	AlbumCover  string
+	AlbumName   string
+	ArtistName  string
+	ReleaseDate string
+	SpotifyLink string
 }
