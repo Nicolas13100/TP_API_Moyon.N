@@ -1,6 +1,7 @@
 package main
 
 import (
+	API "API/site_web/rsc"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -10,16 +11,11 @@ import (
 	"text/template"
 )
 
-type Artist struct {
-	Name       string
-	Type       string
-	Popularity int
-	Followers  struct {
-		Total int
-	}
+func main() {
+
 }
 
-func main() {
+func RUN() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/album/jul", julHandler)
 	http.HandleFunc("/track/sdm", sdmHandler)
@@ -95,12 +91,12 @@ func getAccessToken(authHeader string) (string, error) {
 	return accessToken, nil
 }
 
-func searchArtist(artistName string, accessToken string) (Artist, error) {
+func searchArtist(artistName string, accessToken string) (API.Artist, error) {
 	searchURL := "https://api.spotify.com/v1/search?type=artist&q=" + artistName
 
 	req, err := http.NewRequest("GET", searchURL, nil)
 	if err != nil {
-		return Artist{}, err
+		return API.Artist{}, err
 	}
 
 	req.Header.Add("Authorization", "Bearer "+accessToken)
@@ -108,29 +104,29 @@ func searchArtist(artistName string, accessToken string) (Artist, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return Artist{}, err
+		return API.Artist{}, err
 	}
 	defer resp.Body.Close()
 
 	var searchResp map[string]interface{}
 	if err := json.NewDecoder(resp.Body).Decode(&searchResp); err != nil {
-		return Artist{}, err
+		return API.Artist{}, err
 	}
 
 	artists, ok := searchResp["artists"].(map[string]interface{})
 	if !ok {
-		return Artist{}, fmt.Errorf("aucun artiste trouvé")
+		return API.Artist{}, fmt.Errorf("aucun artiste trouvé")
 	}
 
 	items, ok := artists["items"].([]interface{})
 	if !ok || len(items) == 0 {
-		return Artist{}, fmt.Errorf("aucun artiste trouvé")
+		return API.Artist{}, fmt.Errorf("aucun artiste trouvé")
 	}
 
 	// Récupérer les détails du premier artiste trouvé
 	artistData := items[0].(map[string]interface{})
 
-	var artist Artist
+	var artist API.Artist
 	artist.Name = artistData["name"].(string)
 	artist.Type = artistData["type"].(string)
 	artist.Popularity = int(artistData["popularity"].(float64))
