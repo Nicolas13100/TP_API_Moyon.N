@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", function() {
 console.clear();
 
 const cardsContainer = document.querySelector(".cards");
@@ -44,3 +45,4 @@ const initOverlayCard = (cardEl) => {
 
 cards.forEach(initOverlayCard);
 document.body.addEventListener("pointermove", applyOverlayMask);
+});
