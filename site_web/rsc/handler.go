@@ -13,7 +13,7 @@ func RUN() {
 	http.HandleFunc("/track/sdm", sdmHandler)
 
 	// Serve static files from the "site_web/static" directory << modified from hangman
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("site_web/static"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("../site_web/static"))))
 
 	// Print statement indicating server is running << same
 	fmt.Println("Server is running on :8080 http://localhost:8080")
